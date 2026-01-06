@@ -1,0 +1,41 @@
+---
+- name: Provision VM on KVM (Raw/Shareable)
+  hosts: "{{ target_hypervisor }}"
+  become: true
+  vars:
+    vm_name: "{{ hostname }}"
+    vm_ram_mb: 4096
+    vm_vcpus: 4
+    # Changed extension to .img for raw, though extension is arbitrary
+    disk_path: "/var/lib/libvirt/images/{{ hostname }}.img"
+    disk_size: "40G"
+
+  tasks:
+    - name: Create VM Disk (Raw format)
+      ansible.builtin.command:
+        cmd: "qemu-img create -f raw {{ disk_path }} {{ disk_size }}"
+        creates: "{{ disk_path }}"
+
+    - name: Define VM via virt-install
+      # Added format=raw, cache=none, and shareable=on
+      ansible.builtin.command: >
+        virt-install
+        --name {{ vm_name }}
+        --ram {{ vm_ram_mb }}
+        --vcpus {{ vm_vcpus }}
+        --os-variant rhel10.1
+        --disk path={{ disk_path }},format=raw,bus=virtio,cache=none,shareable=on
+        --network network=default,model=virtio,mac={{ mac_addr }}
+        --pxe
+        --noautoconsole
+        --graphics vnc,listen=0.0.0.0
+      register: virt_install_result
+      failed_when:
+        - virt_install_result.rc != 0
+        - "'already exists' not in virt_install_result.stderr"
+      changed_when: virt_install_result.rc == 0
+
+    - name: Ensure VM is running
+      community.libvirt.virt:
+        name: "{{ vm_name }}"
+        state: running
