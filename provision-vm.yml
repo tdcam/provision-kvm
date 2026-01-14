@@ -29,6 +29,7 @@
         --location {{ install_repo }}
         --extra-args "inst.ks={{ kickstart_url }}"
         --noautoconsole
+        --wait=-1
         --graphics vnc,listen=0.0.0.0
       register: virt_install_result
       failed_when:
