@@ -27,7 +27,7 @@
         --disk path={{ disk_path }},format=raw,bus=virtio,cache=none,shareable=on
         --network network=default,model=virtio,mac={{ mac_addr }}
         --location {{ install_repo }}
-        --extra-args "inst.ks={{ kickstart_url }} console=ttyS0,115200n8"
+        --extra-args "inst.ks={{ kickstart_url }}"
         --noautoconsole
         --graphics vnc,listen=0.0.0.0
       register: virt_install_result
