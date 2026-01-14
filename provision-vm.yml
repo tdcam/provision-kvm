@@ -38,5 +38,5 @@
 
     - name: Ensure VM is running
       community.libvirt.virt:
-        name: "{{ vm_name }}"
+        name: "{{ vm_name }}.aus.redhat.com"
         state: running
