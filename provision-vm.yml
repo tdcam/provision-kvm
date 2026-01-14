@@ -1,14 +1,15 @@
 ---
-- name: Provision VM on KVM (Raw/Shareable)
+- name: Provision VM on KVM (Automated Kickstart)
   hosts: "{{ target_hypervisor }}"
   become: true
   vars:
     vm_name: "{{ hostname }}"
     vm_ram_mb: 4096
     vm_vcpus: 4
-    # Changed extension to .img for raw, though extension is arbitrary
-    disk_path: "/var/lib/libvirt/images/{{ hostname }}.img"
+    disk_path: "/var/lib/libvirt/images/{{ hostname }}.aus.redhat.com.img"
     disk_size: "40G"
+    install_repo: "http://172.31.100.1/rhel10.1"
+    kickstart_url: "http://172.31.100.1/kickstart/rhel10.1.cfg"
 
   tasks:
     - name: Create VM Disk (Raw format)
@@ -17,7 +18,6 @@
         creates: "{{ disk_path }}"
 
     - name: Define VM via virt-install
-      # Added format=raw, cache=none, and shareable=on
       ansible.builtin.command: >
         virt-install
         --name {{ vm_name }}
@@ -26,7 +26,8 @@
         --os-variant rhel10.1
         --disk path={{ disk_path }},format=raw,bus=virtio,cache=none,shareable=on
         --network network=default,model=virtio,mac={{ mac_addr }}
-        --pxe
+        --location {{ install_repo }}
+        --extra-args "inst.ks={{ kickstart_url }} console=ttyS0,115200n8"
         --noautoconsole
         --graphics vnc,listen=0.0.0.0
       register: virt_install_result
