@@ -20,7 +20,7 @@
     - name: Define VM via virt-install
       ansible.builtin.command: >
         virt-install
-        --name {{ vm_name }}
+        --name "{{ vm_name }}.aus.redhat.com"
         --ram {{ vm_ram_mb }}
         --vcpus {{ vm_vcpus }}
         --os-variant rhel10.1
