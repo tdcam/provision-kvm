@@ -36,6 +36,7 @@
         --network network=default,model=virtio,mac={{ mac_addr }}
         --location {{ install_repo }}
         --extra-args "inst.ks={{ kickstart_url }}"
+        --boot hd,network
         --noautoconsole
         --wait=-1
         --graphics vnc,listen=0.0.0.0
