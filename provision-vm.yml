@@ -6,10 +6,11 @@
     vm_name: "{{ hostname }}"
     vm_ram_mb: 4096
     vm_vcpus: 4
+    lifecycle: "{{ lifecycle }}"
     disk_path: "/var/lib/libvirt/images/{{ hostname }}.aus.redhat.com.img"
     disk_size: "40G"
     install_repo: "http://172.31.100.1/rhel10.1"
-    kickstart_url: "http://172.31.100.1/kickstart/rhel10.1.cfg"
+    kickstart_url: "http://172.31.100.1/kickstart/{{ lifecycle}}.cfg"
 
   tasks:
     - name: Create VM Disk (Raw format)
