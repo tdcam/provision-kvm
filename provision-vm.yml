@@ -18,6 +18,13 @@
         cmd: "qemu-img create -f raw {{ disk_path }} {{ disk_size }}"
         creates: "{{ disk_path }}"
 
+    - name: Set disk ownership to qemu:qemu
+      ansible.builtin.file:
+        path: "{{ disk_path }}"
+        owner: qemu
+        group: qemu
+        mode: '0644'
+
     - name: Define VM via virt-install
       ansible.builtin.command: >
         virt-install
