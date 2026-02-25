@@ -1,6 +1,7 @@
 ---
 - name: Provision VM on KVM (Automated Kickstart)
   hosts: "{{ target_hypervisor }}"
+  gather_facts: false
   become: true
   vars:
     vm_name: "{{ lifecycle }}-{{ class }}-{{ srvnumber }}.aus.redhat.com"
