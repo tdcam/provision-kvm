@@ -3,11 +3,11 @@
   hosts: "{{ target_hypervisor }}"
   become: true
   vars:
-    vm_name: "{{ hostname }}"
+    vm_name: "{{ lifecycle }}-{{ class }}-{{ srvnumber )).aus.redhat.com"
     vm_ram_mb: 4096
     vm_vcpus: 4
     lifecycle: "{{ lifecycle }}"
-    disk_path: "/var/lib/libvirt/images/{{ hostname }}.aus.redhat.com.img"
+    disk_path: "/var/lib/libvirt/images/{{ lifecycle }}-{{ class }}-{{ srvnumber )).aus.redhat.com.img"
     disk_size: "40G"
     install_repo: "http://172.31.100.1/rhel10.1"
     kickstart_url: "http://172.31.100.1/kickstart/{{ lifecycle}}.cfg"
@@ -28,7 +28,7 @@
     - name: Define VM via virt-install
       ansible.builtin.command: >
         virt-install
-        --name "{{ vm_name }}.aus.redhat.com"
+        --name "{{ vm_name }}"
         --ram {{ vm_ram_mb }}
         --vcpus {{ vm_vcpus }}
         --os-variant rhel10.1
