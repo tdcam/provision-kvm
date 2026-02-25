@@ -3,7 +3,7 @@
   hosts: "{{ target_hypervisor }}"
   become: true
   vars:
-    vm_name: "{{ lifecycle }}-{{ class }}-{{ srvnumber )).aus.redhat.com"
+    vm_name: "{{ lifecycle }}-{{ class }}-{{ srvnumber }}.aus.redhat.com"
     vm_ram_mb: 4096
     vm_vcpus: 4
     lifecycle: "{{ lifecycle }}"
